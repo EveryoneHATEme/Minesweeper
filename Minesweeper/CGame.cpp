@@ -9,6 +9,7 @@ CGame::CGame(int width, int heigth, const char* title, int frameLimit) {
 	fieldWidth = 10;
 	fieldHeight = 16;
 	bombAmount = 10;
+	mousePos = Vector2i(0, 0);
 	clock = new Clock();
 	startGame();
 }
@@ -21,16 +22,17 @@ void CGame::startGame() {
 
 void CGame::draw() {
 	window->clear(Color::White);
-	int tileSize = min(window->getSize().x, window->getSize().y) / (max(fieldWidth, fieldHeight) + 2);
+	int tileSize = CUtils::getTileSize(Vector2i(fieldWidth, fieldHeight), window->getSize());
 	RectangleShape rect(Vector2f(tileSize, tileSize));
 	rect.setOutlineThickness(2.f);
 	rect.setOutlineColor(Color::Black);
 	for (int x = 0; x < fieldWidth; x++) {
 		for (int y = 0; y < fieldHeight; y++) {
 			CCell* current_cell = field->getCell(x, y);
-			rect.setPosition(Vector2f(window->getSize().x / 2 - fieldWidth * tileSize / 2 + tileSize * x,
-									  window->getSize().y / 2 - fieldHeight * tileSize / 2 + tileSize * y));
-			if (current_cell->bomb == Planted)
+			rect.setPosition(CUtils::windowCoords(Vector2i(x, y), Vector2i(fieldWidth, fieldHeight), tileSize, window->getSize()));
+			Vector2i field_coords = CUtils::getFieldCoords(mousePos, Vector2i(fieldWidth, fieldHeight), tileSize, window->getSize());
+			printf("x: %d, y: %d\n", field_coords.x, field_coords.y);
+			if (Vector2i(x, y) == field_coords)
 				rect.setFillColor(Color::Red);
 			else
 				rect.setFillColor(Color::White);
@@ -55,6 +57,15 @@ void CGame::loop() {
 			case sf::Event::Closed:
 				window->close();
 				break;
+			case sf::Event::MouseButtonPressed:
+				switch (event.mouseButton.button)
+				{
+				case sf::Mouse::Left:
+					mousePos = Vector2i(event.mouseButton.x, event.mouseButton.y);
+					break;
+				default:
+					break;
+				}
 			default:
 				break;
 			}

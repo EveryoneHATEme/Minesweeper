@@ -144,6 +144,7 @@
     <ClCompile Include="CCell.cpp" />
     <ClCompile Include="CField.cpp" />
     <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CUtils.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="CellState.h" />
     <ClInclude Include="CField.h" />
     <ClInclude Include="CGame.h" />
+    <ClInclude Include="CUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "CField.h"
+#include "CUtils.h"
 
 
 using namespace sf;
@@ -16,6 +17,7 @@ protected:
 	CField* field;
 	int bombAmount;
 	int fieldWidth, fieldHeight;
+	Vector2i mousePos;
 public:
 	CGame(int width, int height, const char* title, int frameLimit);
 	void startGame();
