@@ -17,7 +17,9 @@ protected:
 	CField* field;
 	int bombAmount;
 	int fieldWidth, fieldHeight;
+	int tileSize;
 	Vector2i mousePos;
+	Vector2i fieldPos;
 public:
 	CGame(int width, int height, const char* title, int frameLimit);
 	void startGame();

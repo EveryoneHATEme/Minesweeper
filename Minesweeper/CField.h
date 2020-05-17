@@ -16,8 +16,12 @@ protected:
 	void plantBombs();
 public:	
 	CField(int width, int height, int bombs_count);
-	int bombs_count;
+	int bombsCount;
 	CCell* getCell(int x, int y);
+	void openCell(int x, int y);
+	void openCell(Vector2i pos);
+	bool isOpen(int x, int y);
+	bool isOpen(Vector2i pos);
 	Vector2i getSize();
 };
 
