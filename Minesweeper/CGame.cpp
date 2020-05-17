@@ -1,24 +1,39 @@
 #include "CGame.h"
+#include <iostream>
 
 
 CGame::CGame(int width, int heigth, const char* title, int frameLimit) {
 	window = new RenderWindow(VideoMode(width, heigth), title);
 	window->setFramerateLimit(frameLimit);
 
+	fieldWidth = 10;
+	fieldHeight = 16;
+	bombAmount = 10;
 	clock = new Clock();
+	startGame();
+}
+
+
+void CGame::startGame() {
+	field = new CField(fieldWidth, fieldHeight, bombAmount);
 }
 
 
 void CGame::draw() {
 	window->clear(Color::White);
-	int tileSize = 20;
+	int tileSize = min(window->getSize().x, window->getSize().y) / (max(fieldWidth, fieldHeight) + 2);
 	RectangleShape rect(Vector2f(tileSize, tileSize));
 	rect.setOutlineThickness(2.f);
 	rect.setOutlineColor(Color::Black);
-
-	for (int x = 0; x < 5; x++) {
-		for (int y = 0; y < 5; y++) {
-			rect.setPosition(Vector2f(tileSize * (x + 1), tileSize * (y + 1)));
+	for (int x = 0; x < fieldWidth; x++) {
+		for (int y = 0; y < fieldHeight; y++) {
+			CCell* current_cell = field->getCell(x, y);
+			rect.setPosition(Vector2f(window->getSize().x / 2 - fieldWidth * tileSize / 2 + tileSize * x,
+									  window->getSize().y / 2 - fieldHeight * tileSize / 2 + tileSize * y));
+			if (current_cell->bomb == Planted)
+				rect.setFillColor(Color::Red);
+			else
+				rect.setFillColor(Color::White);
 			window->draw(rect);
 		}
 	}
@@ -34,11 +49,17 @@ void CGame::update() {
 
 void CGame::loop() {
 	while (window->isOpen()) {
-		while (window->pollEvent(this->event)) {
-			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+		while (window->pollEvent(event)) {
+			switch (event.type)
+			{
+			case sf::Event::Closed:
 				window->close();
-			update();
+				break;
+			default:
+				break;
+			}
 		}
+		update();
 	}
 }
 
