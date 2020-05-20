@@ -26,3 +26,8 @@ Vector2i CUtils::getFieldCoords(Vector2i mouse_position, Vector2i field_size, in
 
 	return Vector2i((mouse_position.x - field_x1) / tile_size, (mouse_position.y - field_y1) / tile_size);
 }
+
+
+bool CUtils::pointInField(Vector2i fieldPos, int fieldWidth, int fieldHeight) {
+	return 0 <= fieldPos.x && fieldPos.x < fieldWidth && 0 <= fieldPos.y && fieldPos.y < fieldHeight;
+}

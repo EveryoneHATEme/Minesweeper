@@ -1,5 +1,4 @@
 #pragma once
-#include "BombState.h"
 #include "CellState.h"
 #include <iostream>
 
@@ -10,9 +9,9 @@ protected:
 
 public:
 	CellState state;
-	BombState bomb;
+	bool bomb;
 
-	CCell(CellState state, BombState bomb);
+	CCell(CellState state, bool bomb);
 	void addNeighbor();
 	int getNeighborsCount();
 	void plantBomb();

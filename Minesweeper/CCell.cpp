@@ -1,7 +1,7 @@
 #include "CCell.h"
 
 
-CCell::CCell(CellState state, BombState bomb) {
+CCell::CCell(CellState state, bool bomb) {
 	this->state = state;
 	this->bomb = bomb;
 	this->neighbors = 0;
@@ -9,7 +9,7 @@ CCell::CCell(CellState state, BombState bomb) {
 
 
 void CCell::plantBomb() {
-	this->bomb = Planted;
+	this->bomb = true;
 }
 
 void CCell::addNeighbor() {

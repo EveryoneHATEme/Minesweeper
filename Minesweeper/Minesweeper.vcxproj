@@ -148,7 +148,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BombState.h" />
     <ClInclude Include="CCell.h" />
     <ClInclude Include="CellState.h" />
     <ClInclude Include="CField.h" />

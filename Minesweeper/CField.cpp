@@ -5,6 +5,7 @@
 CField::CField(int width, int height, int bombs_count) {
 	_width = width;
 	_height = height;
+	_closedCellCount = _width * _height;
 	bombsCount = bombs_count;
 
 	field = new CCell**[_height];
@@ -13,7 +14,7 @@ CField::CField(int width, int height, int bombs_count) {
 		field[y] = new CCell*[_width];
 		
 		for (int x = 0; x < _width; x++) {
-			field[y][x] = new CCell(Hidden, None);
+			field[y][x] = new CCell(CellState::Hidden, false);
 		}
 	}
 	this->plantBombs();
@@ -23,14 +24,17 @@ CField::CField(int width, int height, int bombs_count) {
 void CField::plantBombs() {
 	srand(time(0));
 	int count = bombsCount;
+	bombsCoords = new Vector2i[bombsCount];
+	int index = 0;
 
 	while (count > 0) {
-		std::cout << 2 << '\n';
 		int x = rand() % _width;
 		int y = rand() % _height;
-		if (field[y][x]->bomb != None)
+		if (field[y][x]->bomb)
 			continue;
 		field[y][x]->plantBomb();
+		bombsCoords[index] = Vector2i(x, y);
+		index++;
 		for (int i = y - 1; i <= y + 1; i++)
 			for (int j = x - 1; j <= x + 1; j++) {
 				if (i == y && j == x)
@@ -51,13 +55,21 @@ Vector2i CField::getSize() {
 }
 
 
+int CField::getNeighbors(int x, int y) {
+	return field[y][x]->getNeighborsCount();
+}
+
+
 CCell* CField::getCell(int x, int y) {
 	return field[y][x];
 }
 
+CCell* CField::getCell(Vector2i pos) {
+	return field[pos.y][pos.x];
+}
 
 void CField::openCell(int x, int y) {
-	field[y][x]->state = Open;
+	field[y][x]->state = CellState::Open;
 	if (field[y][x]->getNeighborsCount() == 0)
 		for (int i = y - 1; i <= y + 1; i++)
 			for (int j = x - 1; j <= x + 1; j++) {
@@ -67,10 +79,11 @@ void CField::openCell(int x, int y) {
 					continue;
 				if (j < 0 || j >= _width)
 					continue;
-				if (field[i][j]->bomb != Planted && field[i][j]->state != Open) {
+				if (!(field[i][j]->bomb) && field[i][j]->state != CellState::Open) {
 					openCell(j, i);
 				}
 			}
+	_closedCellCount--;
 }
 
 void CField::openCell(Vector2i pos) {
@@ -79,9 +92,28 @@ void CField::openCell(Vector2i pos) {
 
 
 bool CField::isOpen(int x, int y) {
-	return field[y][x]->state == Open;
+	return field[y][x]->state == CellState::Open;
 }
 
 bool CField::isOpen(Vector2i pos) {
 	return isOpen(pos.x, pos.y);
+}
+
+
+bool CField::isWin() {
+	for (int i = 0; i < _height; i++)
+		for (int j = 0; j < _width; j++)
+			if (field[i][j]->state == CellState::Hidden && !(field[i][j]->bomb)) {
+				printf("Closed at %d %d\n", j, i);
+				return false;
+			}
+
+	for (int i = 0; i < bombsCount; i++) {
+		Vector2i coords = bombsCoords[i];
+		if (field[coords.y][coords.x]->state != CellState::Hidden) {
+			return false;
+		}
+	}
+
+	return true;
 }

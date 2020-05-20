@@ -44,9 +44,6 @@
     <ClInclude Include="CellState.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="BombState.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="CUtils.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

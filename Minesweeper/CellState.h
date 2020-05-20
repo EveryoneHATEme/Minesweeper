@@ -1,7 +1,7 @@
 #pragma once
 
 
-enum CellState {
+enum class CellState {
 	Hidden,
 	Marked,
 	Open

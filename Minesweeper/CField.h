@@ -11,17 +11,22 @@ class CField
 {
 protected:
 	CCell*** field;
+	Vector2i* bombsCoords;
 	int _width;
 	int _height;
-	void plantBombs();
+	int _closedCellCount;
 public:	
 	CField(int width, int height, int bombs_count);
 	int bombsCount;
+	void plantBombs();
+	int getNeighbors(int x, int y);
 	CCell* getCell(int x, int y);
+	CCell* getCell(Vector2i pos);
 	void openCell(int x, int y);
 	void openCell(Vector2i pos);
 	bool isOpen(int x, int y);
 	bool isOpen(Vector2i pos);
+	bool isWin();
 	Vector2i getSize();
 };
 
