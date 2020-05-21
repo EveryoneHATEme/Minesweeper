@@ -2,7 +2,7 @@
 #include "CellState.h"
 #include <iostream>
 
-class CCell
+class Cell
 {
 protected:
 	int neighbors;
@@ -11,7 +11,7 @@ public:
 	CellState state;
 	bool bomb;
 
-	CCell(CellState state, bool bomb);
+	Cell(CellState state, bool bomb);
 	void addNeighbor();
 	int getNeighborsCount();
 	void plantBomb();

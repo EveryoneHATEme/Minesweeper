@@ -1,27 +1,27 @@
-#include "CField.h"
+#include "Field.h"
 #include <iostream>
 
 
-CField::CField(int width, int height, int bombs_count) {
+Field::Field(int width, int height, int bombs_count) {
 	_width = width;
 	_height = height;
 	_closedCellCount = _width * _height;
 	bombsCount = bombs_count;
 
-	field = new CCell**[_height];
+	field = new Cell**[_height];
 
 	for (int y = 0; y < _height; y++) {
-		field[y] = new CCell*[_width];
+		field[y] = new Cell*[_width];
 		
 		for (int x = 0; x < _width; x++) {
-			field[y][x] = new CCell(CellState::Hidden, false);
+			field[y][x] = new Cell(CellState::Hidden, false);
 		}
 	}
 	this->plantBombs();
 }
 
 
-void CField::plantBombs() {
+void Field::plantBombs() {
 	srand(time(0));
 	int count = bombsCount;
 	bombsCoords = new Vector2i[bombsCount];
@@ -50,25 +50,25 @@ void CField::plantBombs() {
 }
 
 
-Vector2i CField::getSize() {
+Vector2i Field::getSize() {
 	return Vector2i(_width, _height);
 }
 
 
-int CField::getNeighbors(int x, int y) {
+int Field::getNeighbors(int x, int y) {
 	return field[y][x]->getNeighborsCount();
 }
 
 
-CCell* CField::getCell(int x, int y) {
+Cell* Field::getCell(int x, int y) {
 	return field[y][x];
 }
 
-CCell* CField::getCell(Vector2i pos) {
+Cell* Field::getCell(Vector2i pos) {
 	return field[pos.y][pos.x];
 }
 
-void CField::openCell(int x, int y) {
+void Field::openCell(int x, int y) {
 	field[y][x]->state = CellState::Open;
 	if (field[y][x]->getNeighborsCount() == 0)
 		for (int i = y - 1; i <= y + 1; i++)
@@ -86,25 +86,57 @@ void CField::openCell(int x, int y) {
 	_closedCellCount--;
 }
 
-void CField::openCell(Vector2i pos) {
+void Field::openCell(Vector2i pos) {
 	openCell(pos.x, pos.y);
 }
 
 
-bool CField::isOpen(int x, int y) {
+bool Field::isOpen(int x, int y) {
 	return field[y][x]->state == CellState::Open;
 }
 
-bool CField::isOpen(Vector2i pos) {
+bool Field::isOpen(Vector2i pos) {
 	return isOpen(pos.x, pos.y);
 }
 
 
-bool CField::isWin() {
+void Field::setMark(int x, int y) {
+	if (field[y][x]->state == CellState::Hidden)
+		field[y][x]->state = CellState::Marked;
+	else if (field[y][x]->state == CellState::Marked)
+		field[y][x]->state = CellState::Hidden;
+}
+
+void Field::setMark(Vector2i pos) {
+	setMark(pos.x, pos.y);
+}
+
+
+bool Field::isMarked(int x, int y) {
+	return field[y][x]->state == CellState::Marked;
+}
+
+bool Field::isMarked(Vector2i pos) {
+	return isMarked(pos.x, pos.y);
+}
+
+
+bool Field::isWin() {
+	bool all_marked = true;
+	for (int i = 0; i < bombsCount; i++) {
+		Vector2i coords = bombsCoords[i];
+		if (field[coords.y][coords.x]->state != CellState::Marked) {
+			all_marked = false;
+			break;
+		}
+	}
+
+	if (all_marked)
+		return true;
+
 	for (int i = 0; i < _height; i++)
 		for (int j = 0; j < _width; j++)
 			if (field[i][j]->state == CellState::Hidden && !(field[i][j]->bomb)) {
-				printf("Closed at %d %d\n", j, i);
 				return false;
 			}
 

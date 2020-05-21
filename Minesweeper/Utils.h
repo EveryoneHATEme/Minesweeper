@@ -6,7 +6,7 @@ using namespace std;
 using namespace sf;
 
 
-class CUtils
+class Utils
 {
 public:
 	static Vector2f windowCoords(Vector2i field_coords, Vector2i field_size, int tile_size, Vector2u win_size);

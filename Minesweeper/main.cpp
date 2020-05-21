@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
-#include "CGame.h"
+#include "Game.h"
 
 int main()
 {
-    CGame* game = new CGame(600, 600, "Minesweeper", 30);
+    Game* game = new Game(1000, 600, "Minesweeper", 30);
     game->loop();
     return 0;
 }   

@@ -1,19 +1,19 @@
-#include "CUtils.h"
+#include "Utils.h"
 
 
-Vector2f CUtils::windowCoords(Vector2i field_coords, Vector2i field_size, int tile_size, Vector2u win_size) {
+Vector2f Utils::windowCoords(Vector2i field_coords, Vector2i field_size, int tile_size, Vector2u win_size) {
 	int x = win_size.x / 2 - field_size.x * tile_size / 2 + tile_size * field_coords.x;
 	int y = win_size.y / 2 - field_size.y * tile_size / 2 + tile_size * field_coords.y;
 	return Vector2f(x, y);
 }
 
 
-int CUtils::getTileSize(Vector2i field_size, Vector2u win_size) {
-	return min(win_size.x, win_size.y) / (max(field_size.x, field_size.y) + 2);
+int Utils::getTileSize(Vector2i field_size, Vector2u win_size) {
+	return min(win_size.x, win_size.y - 50) / max(field_size.x, field_size.y);
 }
 
 
-Vector2i CUtils::getFieldCoords(Vector2i mouse_position, Vector2i field_size, int tile_size, Vector2u win_size) {
+Vector2i Utils::getFieldCoords(Vector2i mouse_position, Vector2i field_size, int tile_size, Vector2u win_size) {
 	int field_x1 = win_size.x / 2 - field_size.x * tile_size / 2;
 	int field_y1 = win_size.y / 2 - field_size.y * tile_size / 2;
 	int field_x2 = win_size.x / 2 + field_size.x * tile_size / 2;
@@ -28,6 +28,6 @@ Vector2i CUtils::getFieldCoords(Vector2i mouse_position, Vector2i field_size, in
 }
 
 
-bool CUtils::pointInField(Vector2i fieldPos, int fieldWidth, int fieldHeight) {
+bool Utils::pointInField(Vector2i fieldPos, int fieldWidth, int fieldHeight) {
 	return 0 <= fieldPos.x && fieldPos.x < fieldWidth && 0 <= fieldPos.y && fieldPos.y < fieldHeight;
 }
