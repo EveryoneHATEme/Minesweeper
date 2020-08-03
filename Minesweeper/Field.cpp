@@ -18,6 +18,12 @@ Field::Field(int width, int height, int bombs_count) {
 		}
 	}
 	this->plantBombs();
+
+	for (int i = 0; i < _height; i++) {
+		for (int j = 0; j < _width; j++)
+			std::cout << int(field[i][j]->bomb);
+		std::cout << '\n';
+	}
 }
 
 
@@ -70,7 +76,7 @@ Cell* Field::getCell(Vector2i pos) {
 
 void Field::openCell(int x, int y) {
 	field[y][x]->state = CellState::Open;
-	if (field[y][x]->getNeighborsCount() == 0)
+	if (field[y][x]->getNeighborsCount() == 0 && !field[y][x]->bomb)
 		for (int i = y - 1; i <= y + 1; i++)
 			for (int j = x - 1; j <= x + 1; j++) {
 				if (i == y && j == x)
@@ -101,10 +107,14 @@ bool Field::isOpen(Vector2i pos) {
 
 
 void Field::setMark(int x, int y) {
-	if (field[y][x]->state == CellState::Hidden)
+	if (field[y][x]->state == CellState::Hidden && marksCount < bombsCount) {
 		field[y][x]->state = CellState::Marked;
-	else if (field[y][x]->state == CellState::Marked)
+		marksCount++;
+	}
+	else if (field[y][x]->state == CellState::Marked) {
 		field[y][x]->state = CellState::Hidden;
+		marksCount--;
+	}
 }
 
 void Field::setMark(Vector2i pos) {

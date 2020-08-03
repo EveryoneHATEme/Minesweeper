@@ -13,7 +13,7 @@ Game::Game(int width, int heigth, const char* title, int frameLimit) {
 	fieldPos = Vector2i(-1, -1);
 
 	if (!font.loadFromFile("arial.ttf")) {
-		cout << "Error. Can't load font!\n";
+		cout << "Error. Can't load font \"arial.ttf\"!\n";
 		exit(1);
 	}
 	cellDigits.setFont(font);
@@ -22,7 +22,7 @@ Game::Game(int width, int heigth, const char* title, int frameLimit) {
 	message.setFillColor(Color::Black);
 
 	if (!markTexture.loadFromFile("mark.png")) {
-		cout << "Error. Can't load image!\n";
+		cout << "Error. Can't load image \"mark.png\"!\n";
 		exit(1);
 	}
 	mark.setTexture(markTexture);
@@ -102,8 +102,11 @@ void Game::draw() {
 		else
 			message.setString("You lose!");
 		Vector2f zeroCell = Utils::windowCoords(Vector2i(0, 0), Vector2i(fieldWidth, fieldHeight), tileSize, window->getSize());
+		std::cout << zeroCell.x << ' ' << zeroCell.y << '\n';
+		std::cout << message.getLocalBounds().height << '\n';
+		message.setCharacterSize(zeroCell.y - zeroCell.y / 5);
 		float message_x = zeroCell.x + fieldWidth * tileSize / 2 - message.getLocalBounds().width / 2;
-		float message_y = zeroCell.y - message.getLocalBounds().height * 2;
+		float message_y = 0;
 		message.setPosition(message_x, message_y);
 		window->draw(message);
 	}

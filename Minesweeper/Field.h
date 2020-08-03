@@ -15,9 +15,10 @@ protected:
 	int _width;
 	int _height;
 	int _closedCellCount;
+	int bombsCount;
+	int marksCount = 0;
 public:	
 	Field(int width, int height, int bombs_count);
-	int bombsCount;
 	void plantBombs();
 	int getNeighbors(int x, int y);
 	Cell* getCell(int x, int y);
